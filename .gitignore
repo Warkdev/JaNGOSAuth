@@ -1,3 +1,9 @@
+### Java template
+*.class
+
+# Created by .ignore support plugin (hsz.mobi)
+target/
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
