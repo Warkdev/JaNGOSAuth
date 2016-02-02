@@ -224,7 +224,7 @@ public class SAuthRealmList extends AbstractAuthServerPacket {
         flags+=(r.isInvalid() ? 1 : 0);
         flags+=(r.isOffline() ? 2 : 0);
         flags+=(r.isShowversion() ? 4 : 0);
-        flags+=(1*8); // Unknown flag
+        flags+=(0*8); // Unknown flag
         flags+=(0*16); // Unknown flag
         flags+=(r.isNewplayers() ? 32 : 0);
         flags+=(r.isRecommended() ? 64 : 0);

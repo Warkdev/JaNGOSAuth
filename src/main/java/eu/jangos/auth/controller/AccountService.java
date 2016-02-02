@@ -41,11 +41,24 @@ public class AccountService {
        
     /**
      * Returns the account corresponding to the given name.
+     * The name must contain only alphanumeric values.
      * @param name The name of the account to be found.
      * @return The account corresponding to the given name. Null if the account if not found.
      */
     public Account getAccount(String name)
     {
+        if(name == null || name.isEmpty())
+        {
+            logger.error("The account name is null or empty.");
+            return null;
+        }
+        
+        if(!name.matches("[a-zA-Z0-9]+"))
+        {
+            logger.error("The account name must contain only alphanumeric values.");
+            return null;
+        }                
+        
         Account account = null;
         
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -67,10 +80,17 @@ public class AccountService {
      */
     public boolean checkExistence(String name) {                
         // Empty names are not allowed.
-        if(name == null || name.isEmpty()) {
-            logger.debug("Name parameter is empty, exiting. exist = false.");
-            return false;                   
+        if(name == null || name.isEmpty())
+        {
+            logger.error("The account name is null or empty.");
+            return false;
         }
+        
+        if(!name.matches("[a-zA-Z0-9]+"))
+        {
+            logger.error("The account name must contain only alphanumeric values.");
+            return false;
+        }                  
         
         Session session = HibernateUtil.getSessionFactory().openSession();
         boolean found = false;                        
