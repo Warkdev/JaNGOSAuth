@@ -1,4 +1,4 @@
-# JaNGOSAuth ![Build status](https://travis-ci.org/Warkdev/JaNGOSAuth.png)
+# JaNGOSAuth [![Build status](https://travis-ci.org/Warkdev/JaNGOSAuth.png)][1]
 JaNGOS Authentication server is a featured authentication server for WoW 1.12.x written in Java. 
 
 # Supported platforms
@@ -14,3 +14,6 @@ JaNGOS is powered by several known frameworks:
 # Disclaimer - Educational purposes
 This open-source project based on MaNGOS Zero & Apache License 2.0 is made available to the community for educationnal purposes.
 It is not meant for a production usage or to make any profit with it.
+
+
+[1]: https://travis-ci.org/Warkdev/JaNGOSAuth "Travis CI · JaNGOS Authentication Server build status"
