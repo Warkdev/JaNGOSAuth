@@ -29,6 +29,36 @@ import eu.jangos.auth.network.srp.SRPServer;
 public class AuthUtils {
 
     /**
+     * Check whether the ip passed in parameter is a valid IPv4 address or not.
+     * @param ipAddress The IP to be validated
+     * @return a boolean value, true if the address is a valid IPv4, false otherwise.
+     */
+    public static boolean isValidIP4Address(String ipAddress) {
+        if (ipAddress.matches("^(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})$")) {
+            String[] groups = ipAddress.split("\\.");
+
+            for (int i = 0; i <= 3; i++) {
+                String segment = groups[i];
+                if (segment == null || segment.length() <= 0) {
+                    return false;
+                }
+
+                int value = 0;
+                try {
+                    value = Integer.parseInt(segment);
+                } catch (NumberFormatException e) {
+                    return false;
+                }
+                if (value > 255) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+    
+    /**
      * Generates a SAuthLogonChallengePacket based on the SRPServer calculation.
      * @param server The SRPServer used to make the calculation of the challenge.
      * @return The created packet.

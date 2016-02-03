@@ -32,7 +32,6 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import io.netty.util.AttributeKey;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import org.slf4j.Logger;
@@ -100,16 +99,16 @@ public class AuthServer {
             try {
                 HOST = InetAddress.getByAddress(ps.getParameter("authAddress").getBytes());
                 f = b.bind(HOST, PORT).sync();
-                logger.info("jE4W authentication server started listening on "+HOST.getHostAddress()+":"+PORT);
+                logger.info("JaNGOS authentication server started listening on "+HOST.getHostAddress()+":"+PORT);
             } catch (UnknownHostException ex) {
                 f = b.bind(PORT);
-                logger.info("jE4W authentication server started listening on port "+PORT);
+                logger.info("JaNGOS authentication server started listening on port "+PORT);
             }
 
             // Wait until the server socket is closed.
             f.channel().closeFuture().sync();
         } finally {
-            logger.info("jE4W authentication server shutting down.");
+            logger.info("JaNGOS authentication server shutting down.");
             // Shut down all event loops to terminate all threads.
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();

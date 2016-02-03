@@ -1,5 +1,4 @@
 package eu.jangos.auth.model;
-// Generated 01-févr.-2016 22:32:30 by Hibernate Tools 4.3.1
 
 
 import java.util.HashSet;

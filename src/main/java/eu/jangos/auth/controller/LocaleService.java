@@ -18,6 +18,7 @@ package eu.jangos.auth.controller;
 
 import eu.jangos.auth.hibernate.HibernateUtil;
 import eu.jangos.auth.model.Locale;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -45,20 +46,15 @@ public class LocaleService {
             return getDefaultLocale();
         }        
         
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        
-        Locale l = (Locale) session.createCriteria(Locale.class).add(Restrictions.like("localeString", locale)).list().get(0);
-        
-        session.close();
-        
-        if(l == null)
-        {
-            logger.debug("Locale not supported, providing default.");
-            return getDefaultLocale();
-        } else {
+        Locale l;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            l = (Locale) session.createCriteria(Locale.class).add(Restrictions.like("localeString", locale)).uniqueResult();
             logger.debug("Locale found, returning "+l.getLocale());
             return l;
-        }
+        } catch(HibernateException he) {
+            logger.debug("Locale not supported, providing default.");
+            return getDefaultLocale();
+        }        
     }
     
     /**
@@ -68,12 +64,14 @@ public class LocaleService {
     private Locale getDefaultLocale() {     
         String locale = this.ps.getParameter("defaultLocale");
         
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        
-        Locale l = (Locale) session.createCriteria(Locale.class).add(Restrictions.like("localeString", locale));
-        
-        session.close();
-                
-        return l;
+        Locale l;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            l = (Locale) session.createCriteria(Locale.class).add(Restrictions.like("localeString", locale)).uniqueResult();
+            logger.debug("Locale found, returning "+l.getLocale());
+            return l;
+        } catch (HibernateException he) {
+            logger.debug("No default locale found, returning null.");
+            return null;
+        }                        
     }
 }

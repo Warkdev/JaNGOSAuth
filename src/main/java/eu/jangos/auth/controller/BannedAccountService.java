@@ -30,9 +30,7 @@ import org.slf4j.LoggerFactory;
  * @version v0.1 BETA
  */
 public class BannedAccountService {
-    private static final Logger logger = LoggerFactory.getLogger(BannedAccountService.class);        
-    
-    private Bannedaccount bannedAccount;
+    private static final Logger logger = LoggerFactory.getLogger(BannedAccountService.class);                
 
     /**
      * This method checks whether an account is banned or not into the database.
