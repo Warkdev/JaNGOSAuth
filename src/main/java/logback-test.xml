@@ -12,5 +12,5 @@
 
     <logger name="io.netty" level="WARN"/>
     <logger name="i.n" level="WARN"/>
-    <logger name="eu.jangos" level="INFO"/>
+    <logger name="eu.jangos" level="WARN"/>
 </configuration>
