@@ -1,0 +1,15 @@
+eu.jangos.auth
+eu.jangos.auth.authenum
+eu.jangos.auth.controller
+eu.jangos.auth.exception
+eu.jangos.auth.hibernate
+eu.jangos.auth.model
+eu.jangos.auth.network.decoder
+eu.jangos.auth.network.encoder
+eu.jangos.auth.network.handler
+eu.jangos.auth.network.opcode
+eu.jangos.auth.network.packet
+eu.jangos.auth.network.packet.client
+eu.jangos.auth.network.packet.server
+eu.jangos.auth.network.srp
+eu.jangos.auth.utils
