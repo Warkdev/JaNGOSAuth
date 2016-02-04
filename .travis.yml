@@ -9,6 +9,6 @@ branches:
  only:
    - master
 before_install:
- - ls -al /home/travis/build/Warkdev/JaNGOSAuth/database/
  - mysql --user root < /home/travis/build/Warkdev/JaNGOSAuth/database/structure.sql
  - mysql --user root jangosauth < /home/travis/build/Warkdev/JaNGOSAuth/database/data.sql
+ - mysql --user root -e 'show databases;'
