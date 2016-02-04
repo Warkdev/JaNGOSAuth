@@ -1,4 +1,6 @@
 language: java
+services:
+ - mysql
 jdk:
  - openjdk7
  - oraclejdk8
@@ -6,3 +8,6 @@ jdk:
 branches:
  only:
    - master
+before_install:
+ - mysql --user root < /home/travis/build/Warkdev/JaNGOSAuth/database/structure.sql
+ - mysql --user root jangosauth < /home/travis/build/Warkdev/JaNGOSAuth/database/data.sql
