@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Talendrys.
+ * Copyright 2016 Warkdev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import java.security.SecureRandom;
 /**
  * BigInteger wrapper used for the authentication (SRP6 protocol)
  *
- * @author Talendrys
+ * @author Warkdev.
  */
 public class BigNumber {
 
@@ -169,9 +169,9 @@ public class BigNumber {
 
     @Override
     public String toString() {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         byte[] array = asByteArray();
-        result.append("(" + array.length + ")");
+        result.append("(").append(array.length).append(")");
         for (int i = 0; i < array.length; i++) {
             result.append(array[i]);
             result.append(" ");
@@ -180,9 +180,9 @@ public class BigNumber {
     }
 
     public String toCharString() {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         byte[] array = asByteArray();
-        result.append("(" + array.length + ")");
+        result.append("(").append(array.length).append(")");
         for (int i = 0; i < array.length; i++) {
             result.append((char) array[i]);
             result.append(" ");

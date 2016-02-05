@@ -1,7 +1,7 @@
 package eu.jangos.auth.controller;
 
 /*
- * Copyright 2016 Talendrys.
+ * Copyright 2016 Warkdev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ package eu.jangos.auth.controller;
 
 import eu.jangos.auth.hibernate.HibernateUtil;
 import eu.jangos.auth.model.Bannedip;
+import eu.jangos.auth.utils.AuthUtils;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -38,19 +40,23 @@ public class BannedIPService {
      */
     public boolean isIPBanned(String ip) {
         if(ip == null || ip.isEmpty()) {
-            logger.debug("IP parameter is empty, exiting. ban = true.");
+            logger.error("IP parameter is empty, exiting. ban = true.");
             return true;
         }
-              
-        Session session = HibernateUtil.getSessionFactory().openSession();
+                      
+        if(!AuthUtils.isValidIP4Address(ip)) {
+            logger.error("A valid IPv4 address must be provided.");
+            return true;
+        }        
         
-        boolean banned = (session.createCriteria(Bannedip.class)
-                .add(Restrictions.like("ip", ip))
-                .add(Restrictions.eq("active", true))
-                .list().size() != 0);
-        
-        session.close();
-        
-        return banned;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return (session.createCriteria(Bannedip.class)
+                    .add(Restrictions.and(
+                            Restrictions.like("ip", ip),
+                            Restrictions.eq("active", true)))
+                    .uniqueResult() != null);
+        } catch(HibernateException he) {
+            return true;
+        }                
     }
 }

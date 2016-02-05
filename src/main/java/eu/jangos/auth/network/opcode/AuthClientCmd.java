@@ -1,7 +1,7 @@
 package eu.jangos.auth.network.opcode;
 
 /*
- * Copyright 2016 Talendrys.
+ * Copyright 2016 Warkdev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,12 +33,12 @@ public enum AuthClientCmd {
     CMD_AUTH_LOGON_PROOF((byte) 1),
     
     /**
-     * Not supported by jE4W. Usage ?
+     * Not supported by JaNGOS. Usage ?
      */
     CMD_AUTH_RECONNECT_CHALLENGE((byte) 2),
     
     /**
-     * Not supported by jE4W. Usage ?
+     * Not supported by JaNGOS. Usage ?
      */
     CMD_AUTH_RECONNECT_PROOF((byte) 3),
     
@@ -48,27 +48,27 @@ public enum AuthClientCmd {
     CMD_REALM_LIST((byte) 16),
     
     /**
-     * Not supported by jE4W. Usage ?
+     * Not supported by JaNGOS. Usage ?
      */
     CMD_XFER_INITIATE((byte) 48),
     
     /**
-     * Not supported by jE4W. Usage ?
+     * Not supported by JaNGOS. Usage ?
      */
     CMD_XFER_DATA((byte) 49),
     
     /**
-     * Not supported by jE4W. Usage ?
+     * Not supported by JaNGOS. Usage ?
      */
     CMD_XFER_ACCEPT((byte) 50),
     
     /**
-     * Not supported by jE4W. Usage ?
+     * Not supported by JaNGOS. Usage ?
      */
     CMD_XFER_RESUME((byte) 51),
     
     /**
-     * Not supported by jE4W. Usage ?
+     * Not supported by JaNGOS. Usage ?
      */
     CMD_XFER_CANCEL((byte) 52);
     

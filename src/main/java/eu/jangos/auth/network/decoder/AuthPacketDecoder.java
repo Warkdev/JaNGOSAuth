@@ -1,7 +1,7 @@
 package eu.jangos.auth.network.decoder;
 
 /*
- * Copyright 2016 Talendrys.
+ * Copyright 2016 Warkdev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,7 +71,7 @@ public class AuthPacketDecoder extends ByteToMessageDecoder {
                 packet = new CAuthRealmList(code);                
                 break;
             default:
-                logger.debug("Context: " + ctx.name() + "Packet received, opcode not supported: " + code);
+                logger.error("Context: " + ctx.name() + "Packet received, opcode not supported: " + code);
                 msg.clear();
                 ctx.close();
                 break;

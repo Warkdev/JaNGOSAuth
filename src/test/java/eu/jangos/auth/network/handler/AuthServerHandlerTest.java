@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Talendrys.
+ * Copyright 2016 Warkdev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,75 +15,60 @@
  */
 package eu.jangos.auth.network.handler;
 
-import io.netty.channel.ChannelHandlerContext;
+import eu.jangos.auth.network.decoder.AuthPacketDecoder;
+import eu.jangos.auth.network.encoder.AuthPacketEncoder;
+import eu.jangos.auth.network.opcode.AuthClientCmd;
+import eu.jangos.auth.network.packet.client.CAuthLogonChallengePacket;
+import io.netty.channel.embedded.EmbeddedChannel;
+import java.net.InetAddress;
 import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.Before;
 
 /**
  *
- * @author Talendrys
+ * @author Warkdev
  */
 public class AuthServerHandlerTest {
     
+    EmbeddedChannel ch;
+    
     public AuthServerHandlerTest() {
     }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
+
     @Before
-    public void setUp() {
+    public void setup(){
+        ch = new EmbeddedChannel(new AuthServerHandler());        
     }
     
     @After
-    public void tearDown() {
+    public void tearDown(){
+        ch.close();
     }
-
+    
     /**
      * Test of channelRead method, of class AuthServerHandler.
      */
     @Test
-    public void testChannelRead() throws Exception {
+    public void testLoginFlow() throws Exception {
         System.out.println("channelRead");
-        ChannelHandlerContext ctx = null;
-        Object msg = null;
-        AuthServerHandler instance = new AuthServerHandler();
-        //instance.channelRead(ctx, msg);
-		assertTrue(true);
-    }
-
-    /**
-     * Test of channelReadComplete method, of class AuthServerHandler.
-     */
-    @Test
-    public void testChannelReadComplete() {
-        System.out.println("channelReadComplete");
-        ChannelHandlerContext ctx = null;
-        AuthServerHandler instance = new AuthServerHandler();
-        //instance.channelReadComplete(ctx);
-        assertTrue(true);
-    }
-
-    /**
-     * Test of exceptionCaught method, of class AuthServerHandler.
-     */
-    @Test
-    public void testExceptionCaught() {
-        System.out.println("exceptionCaught");
-        ChannelHandlerContext ctx = null;
-        Throwable cause = null;
-        AuthServerHandler instance = new AuthServerHandler();
-        //instance.exceptionCaught(ctx, cause);
-        assertTrue(true);
-    }
-    
+              
+        CAuthLogonChallengePacket logon = new CAuthLogonChallengePacket(AuthClientCmd.CMD_AUTH_LOGON_CHALLENGE);
+        logon.setAccountName("test");
+        logon.setAccountLength(4);
+        logon.setBuild(5875);
+        logon.setCountry("frFR");
+        logon.setError(3);
+        logon.setGame("WoW");
+        logon.setVersion("1.12.1");
+        logon.setPlatform("x86");
+        logon.setOs("x86");
+        logon.setTimezone(60);
+        logon.setIp(InetAddress.getLocalHost());
+                                        
+        ch.writeInbound(logon);   
+        System.out.println(ch.readOutbound());
+        
+        System.out.println("End channelRead");
+    }       
 }

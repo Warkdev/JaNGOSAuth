@@ -1,7 +1,7 @@
 package eu.jangos.auth;
 
 /*
- * Copyright 2016 Talendrys.
+ * Copyright 2016 Warkdev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * AuthServer is the main class of the authentication server for jE4W. This
+ * AuthServer is the main class of the authentication server for JaNGOS. This
  * class is responsible to startup the listener server.
  *
  * @author Warkdev

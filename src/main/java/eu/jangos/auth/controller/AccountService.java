@@ -119,17 +119,17 @@ public class AccountService {
         }
 
         if (!checkExistence(account.getName())) {
-            logger.error("Account trying to login does not exist.");
+            logger.error("Account trying to login does not exist: " +account.getName());
             return false;
         }
 
         if (account.isLocked()) {
-            logger.error("A locked account is attempting to login.");
+            logger.error("A locked account is attempting to login: " +account.getName());
             return false;
         }
         
         if (isBanned(account, ip)) {
-            logger.error("A banned account is attempting to login.");
+            logger.error("A banned account is attempting to login: "+account.getName());
             return false;
         }
         

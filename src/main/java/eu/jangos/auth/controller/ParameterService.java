@@ -1,7 +1,7 @@
 package eu.jangos.auth.controller;
 
 /*
- * Copyright 2016 Talendrys.
+ * Copyright 2016 Warkdev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package eu.jangos.auth.controller;
 
 import eu.jangos.auth.hibernate.HibernateUtil;
 import eu.jangos.auth.model.Parameter1;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -41,14 +42,16 @@ public class ParameterService {
             logger.debug("Key parameter is empty, returning null.");
             return null;
         }
-        
-        String value = null;
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        
-        value = ((Parameter1) session.createCriteria(Parameter1.class).add(Restrictions.eq("param", key)).list().get(0)).getVal();
-        
-        session.close();
-        
-        return value;
+                
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Parameter1 parameter = (Parameter1) session.createCriteria(Parameter1.class).add(Restrictions.eq("param", key)).uniqueResult();
+            
+            if(parameter == null)
+                return null;
+            
+            return parameter.getVal();            
+        } catch (HibernateException he) {
+            return null;
+        }                
     }    
 }

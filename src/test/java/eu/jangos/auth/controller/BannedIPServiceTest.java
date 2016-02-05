@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Talendrys.
+ * Copyright 2016 Warkdev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,49 +15,60 @@
  */
 package eu.jangos.auth.controller;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
  *
- * @author Talendrys
+ * @author Warkdev
  */
 public class BannedIPServiceTest {
     
     public BannedIPServiceTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
     }
 
     /**
      * Test of isIPBanned method, of class BannedIPService.
      */
     @Test
-    public void testIsIPBanned() {
-        System.out.println("isIPBanned");
-        String ip = "";
-        BannedIPService instance = new BannedIPService();
-        boolean expResult = false;
-        boolean result = instance.isIPBanned(ip);
-        assertTrue(true);
+    public void testIsIPBannedOK() {
+        System.out.println("testIsIPBannedOK");
+        String ip = "153.124.12.1";
+        BannedIPService instance = new BannedIPService();                
+        assertTrue(instance.isIPBanned(ip));
     }
     
+    /**
+     * Test of isIPBanned method, of class BannedIPService.
+     */
+    @Test
+    public void testIsIPBannedKO() {
+        System.out.println("testIsIPBannedKO");
+        String ip = "127.0.0.1";
+        BannedIPService instance = new BannedIPService();
+        assertFalse(instance.isIPBanned(ip));
+    }
+    
+    /**
+     * Test of isIPBanned method, of class BannedIPService.
+     */
+    @Test
+    public void testIsIPBannedBoundaries() {
+        System.out.println("testIsIPBannedKO");
+        String ip = "389.0.0.1";
+        BannedIPService instance = new BannedIPService();
+        assertTrue(instance.isIPBanned(ip));
+        
+        ip = "127.0.1";
+        assertTrue(instance.isIPBanned(ip));
+        
+        ip = "";
+        assertTrue(instance.isIPBanned(ip));
+        
+        ip = "azdadsqd.adzza";
+        assertTrue(instance.isIPBanned(ip));
+        
+        ip = null;
+        assertTrue(instance.isIPBanned(ip));
+    }
 }

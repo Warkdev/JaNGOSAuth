@@ -1,7 +1,7 @@
 package eu.jangos.auth.network.packet.client;
 
 /*
- * Copyright 2016 Talendrys.
+ * Copyright 2016 Warkdev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -182,6 +182,11 @@ public class CAuthLogonProofPacket extends AbstractAuthClientPacket {
 
         this.keyNumber = in.readByte();
         this.securityFlag = in.readByte();        
+    }
+
+    @Override
+    public void encode(ByteBuf buf) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

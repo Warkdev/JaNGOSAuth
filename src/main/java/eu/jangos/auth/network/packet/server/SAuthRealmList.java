@@ -1,7 +1,7 @@
 package eu.jangos.auth.network.packet.server;
 
 /*
- * Copyright 2016 Talendrys.
+ * Copyright 2016 Warkdev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -181,6 +181,7 @@ public class SAuthRealmList extends AbstractAuthServerPacket {
         this.account = account;
     }
 
+    @Override
     public String toString() {
         String toString = "[SAuthRealmList [Opcode:" + this.code
                 + ", size:" + this.size
@@ -215,20 +216,25 @@ public class SAuthRealmList extends AbstractAuthServerPacket {
      * @return The size of this realm with the formula (14 + address + ":" +
      * port + name)
      */
-    private int getRealmLength(Realm r) {
-        return 14 + new String(r.getAddress() + ":" + r.getPort()).length() + r.getName().length();
+    private int getRealmLength(Realm r) {               
+        return 14 + (r.getAddress() + ":" + r.getPort()).length() + r.getName().length();
     }
 
+    /**
+     * This method is converting the realm flags into a single integer.
+     * @param r The realm for which the flags needs to be converted.
+     * @return The integer value corresponding to the flags.
+     */
     private int convertFlagsToInt(Realm r) {
         int flags = 0;
         flags+=(r.isInvalid() ? 1 : 0);
         flags+=(r.isOffline() ? 2 : 0);
         flags+=(r.isShowversion() ? 4 : 0);
-        flags+=(0*8); // Unknown flag
-        flags+=(0*16); // Unknown flag
+        // flags+=(0*8); // Unknown flag
+        // flags+=(0*16); // Unknown flag
         flags+=(r.isNewplayers() ? 32 : 0);
         flags+=(r.isRecommended() ? 64 : 0);
-        flags+=(0*128); // unknown flag
+        // flags+=(0*128); // unknown flag
         
         return flags;
     }

@@ -1,7 +1,7 @@
 package eu.jangos.auth.controller;
 
 /*
- * Copyright 2016 Talendrys.
+ * Copyright 2016 Warkdev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +49,10 @@ public class LocaleService {
         Locale l;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             l = (Locale) session.createCriteria(Locale.class).add(Restrictions.like("localeString", locale)).uniqueResult();
+            
+            if(l == null)
+                return getDefaultLocale();
+            
             logger.debug("Locale found, returning "+l.getLocale());
             return l;
         } catch(HibernateException he) {

@@ -1,7 +1,7 @@
 package eu.jangos.auth.network.packet.server;
 
 /*
- * Copyright 2016 Talendrys.
+ * Copyright 2016 Warkdev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,6 +80,7 @@ public class SAuthLogonProofPacket extends AbstractAuthServerPacket {
         this.accountFlag = accountFlag;
     }
 
+    @Override
     public String toString() {
         String toString = "[SAuthLogonProofPacket [Opcode:" + this.code
                 + ", Result:" + this.result

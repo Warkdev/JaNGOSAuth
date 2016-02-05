@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Talendrys.
+ * Copyright 2016 Warkdev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,37 +15,16 @@
  */
 package eu.jangos.auth.controller;
 
-import eu.jangos.auth.model.Locale;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
  *
- * @author Talendrys
+ * @author Warkdev.
  */
 public class LocaleServiceTest {
     
     public LocaleServiceTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
     }
 
     /**
@@ -54,11 +33,30 @@ public class LocaleServiceTest {
     @Test
     public void testGetLocaleForString() {
         System.out.println("getLocaleForString");
-        String locale = "";
-        LocaleService instance = new LocaleService();
-        Locale expResult = null;
-        Locale result = instance.getLocaleForString(locale);
-        assertTrue(true);
+        String locale = "frFR";
+        LocaleService instance = new LocaleService();        
+        assertNotNull(instance.getLocaleForString(locale));
     }
     
+    /**
+     * Test of getLocaleForString method, of class LocaleService.
+     */
+    @Test
+    public void testGetLocaleForUnknownString() {
+        System.out.println("testGetLocaleForUnknownString");
+        String locale = "testLocale";
+        LocaleService instance = new LocaleService();        
+        assertNotSame(instance.getLocaleForString(locale).getLocaleString(), locale);
+    }
+    
+    /**
+     * Test of getLocaleForString method, of class LocaleService.
+     */
+    @Test
+    public void testGetLocaleForNullString() {
+        System.out.println("testGetLocaleForNullString");
+        String locale = null;
+        LocaleService instance = new LocaleService();        
+        assertNotNull(instance.getLocaleForString(locale));
+    }
 }

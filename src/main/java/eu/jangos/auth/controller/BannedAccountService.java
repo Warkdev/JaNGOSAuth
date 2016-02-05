@@ -19,6 +19,7 @@ package eu.jangos.auth.controller;
 import eu.jangos.auth.hibernate.HibernateUtil;
 import eu.jangos.auth.model.Account;
 import eu.jangos.auth.model.Bannedaccount;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -43,14 +44,15 @@ public class BannedAccountService {
             return true;
         }         
                         
-        Session session = HibernateUtil.getSessionFactory().openSession();                                
-        
-        boolean banned = (session.createCriteria(Bannedaccount.class)
-                .add(Restrictions.like("accountByFkBannedaccount", account))
-                .add(Restrictions.like("active", true))
-                .list().size() == 1);
-        
-        return banned;
+        try(Session session = HibernateUtil.getSessionFactory().openSession()) {            
+            return (session.createCriteria(Bannedaccount.class)
+                .add(Restrictions.and(
+                        Restrictions.like("accountByFkBannedaccount", account),
+                        Restrictions.eq("active", true)))
+                .uniqueResult() != null);                        
+        } catch (HibernateException he) {
+            return true;
+        }        
     }
     
 }

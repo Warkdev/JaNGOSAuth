@@ -1,7 +1,7 @@
 package eu.jangos.auth.network.encoder;
 
 /*
- * Copyright 2016 Talendrys.
+ * Copyright 2016 Warkdev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ public class AuthPacketEncoder extends MessageToByteEncoder<AbstractAuthServerPa
     
     @Override
     protected void encode(ChannelHandlerContext ctx, AbstractAuthServerPacket msg, ByteBuf out) throws Exception {     
-        logger.debug("Context: "+ctx.name()+", packet: "+msg.toString());
+        logger.error("Context: "+ctx.name()+", packet: "+msg.toString());        
         msg.encode(out);        
     }
     

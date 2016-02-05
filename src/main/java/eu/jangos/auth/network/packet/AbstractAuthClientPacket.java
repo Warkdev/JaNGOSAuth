@@ -1,7 +1,7 @@
 package eu.jangos.auth.network.packet;
 
 /*
- * Copyright 2016 Talendrys.
+ * Copyright 2016 Warkdev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +39,8 @@ public abstract class AbstractAuthClientPacket {
     public void setOpcode(final AuthClientCmd opcode){
         this.opcode = opcode;
     }
+    
+    public abstract void encode(ByteBuf buf) throws Exception;
     
     public abstract void decode(ByteBuf buf) throws Exception;
 }

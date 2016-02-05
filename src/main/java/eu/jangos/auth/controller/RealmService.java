@@ -1,7 +1,7 @@
 package eu.jangos.auth.controller;
 
 /*
- * Copyright 2016 Talendrys.
+ * Copyright 2016 Warkdev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package eu.jangos.auth.controller;
 import eu.jangos.auth.hibernate.HibernateUtil;
 import eu.jangos.auth.model.Realm;
 import java.util.List;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,12 +38,12 @@ public class RealmService {
      */
     public List<Realm> getAllRealms(){
         logger.debug("Returning all realms");
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        
-        List<Realm> listRealms = session.createCriteria(Realm.class).list();
-        
-        session.close();
-        
-        return listRealms;
+                
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createCriteria(Realm.class).list();
+        } catch (HibernateException he) {
+            return null;
+        }
+                
     }
 }

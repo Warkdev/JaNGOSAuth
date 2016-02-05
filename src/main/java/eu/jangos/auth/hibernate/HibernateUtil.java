@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Talendrys.
+ * Copyright 2016 Warkdev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,14 +24,16 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
  * Hibernate Utility class with a convenient method to get Session Factory
  * object.
  *
- * @author Talendrys
+ * @author Warkdev.
+ * @version v1.0
+ * @since 05-02-2016
  */
 public class HibernateUtil {
 
     private static final SessionFactory sessionFactory;
 
     static {
-// A SessionFactory is set up once for an application!
+        // A SessionFactory is set up once for an application!
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .configure() // configures settings from hibernate.cfg.xml
                 .build();

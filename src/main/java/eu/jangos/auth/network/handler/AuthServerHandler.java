@@ -1,7 +1,7 @@
 package eu.jangos.auth.network.handler;
 
 /*
- * Copyright 2016 Talendrys.
+ * Copyright 2016 Warkdev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -97,7 +97,7 @@ public class AuthServerHandler extends ChannelInboundHandlerAdapter {
                 
                 this.cChallenge = (CAuthLogonChallengePacket) request;                                
                 
-                boolean update = false;
+                boolean update = false;                                
                 
                 // Checking build number.
                 if (this.cChallenge.getBuild() < Integer.parseInt(parameterService.getParameter("minSupportedBuild")) || this.cChallenge.getBuild() > Integer.parseInt(parameterService.getParameter("maxSupportedBuild"))){
@@ -215,7 +215,7 @@ public class AuthServerHandler extends ChannelInboundHandlerAdapter {
                 
                 break;
             default:
-                logger.debug("Context: "+ctx.name()+", account: "+this.cChallenge.getAccountName()+" : Opcode is not supported");
+                logger.error("Context: "+ctx.name()+", account: "+this.cChallenge.getAccountName()+" : Opcode is not supported");
         }
 
         logger.debug("Context: "+ctx.name()+", account: "+this.cChallenge.getAccountName()+", response: "+response);
@@ -230,8 +230,6 @@ public class AuthServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        // Close the connection when an exception is raised.
-        cause.printStackTrace();
         ctx.close();
     }
 }

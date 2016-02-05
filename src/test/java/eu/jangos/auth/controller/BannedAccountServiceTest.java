@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Talendrys.
+ * Copyright 2016 Warkdev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,49 +16,53 @@
 package eu.jangos.auth.controller;
 
 import eu.jangos.auth.model.Account;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
  *
- * @author Talendrys
+ * @author Warkdev.
  */
 public class BannedAccountServiceTest {
     
     public BannedAccountServiceTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
     }
 
     /**
      * Test of isAccountBanned method, of class BannedAccountService.
      */
     @Test
-    public void testIsAccountBanned() {
-        System.out.println("isAccountBanned");
-        Account account = null;
-        BannedAccountService instance = new BannedAccountService();
-        boolean expResult = false;
-        boolean result = instance.isAccountBanned(account);
-        assertTrue(true);
+    public void testIsAccountBannedOK() {
+        System.out.println("isAccountBannedOK");
+        // We know this name exist in our test data.
+        AccountService as = new AccountService();
+        Account account = as.getAccount("test");
+        BannedAccountService instance = new BannedAccountService();                
+        assertFalse(instance.isAccountBanned(account));
     }
     
+    /**
+     * Test of isAccountBanned method, of class BannedAccountService.
+     */
+    @Test
+    public void testIsAccountBannedKO() {
+        System.out.println("isAccountBannedKO");
+        // We know this name exist in our test data.
+        AccountService as = new AccountService();
+        Account account = as.getAccount("banned");
+        BannedAccountService instance = new BannedAccountService();                
+        assertTrue(instance.isAccountBanned(account));
+    }
+    
+    /**
+     * Test of isAccountBanned method, of class BannedAccountService.
+     */
+    @Test
+    public void testIsAccountBannedBoundaries() {
+        System.out.println("testIsAccountBannedBoundaries");
+        // We know this name exist in our test data.        
+        Account account = null;
+        BannedAccountService instance = new BannedAccountService();                
+        assertTrue(instance.isAccountBanned(account));
+    }    
 }

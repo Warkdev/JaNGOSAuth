@@ -1,7 +1,7 @@
 package eu.jangos.auth.utils;
 
 /*
- * Copyright 2016 Talendrys.
+ * Copyright 2016 Warkdev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +49,7 @@ public class AuthUtils {
                 } catch (NumberFormatException e) {
                     return false;
                 }
+                
                 if (value > 255) {
                     return false;
                 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Talendrys.
+ * Copyright 2016 Warkdev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,36 +15,16 @@
  */
 package eu.jangos.auth.controller;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
  *
- * @author Talendrys
+ * @author Warkdev
  */
 public class ParameterServiceTest {
     
     public ParameterServiceTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
     }
 
     /**
@@ -53,11 +33,31 @@ public class ParameterServiceTest {
     @Test
     public void testGetParameter() {
         System.out.println("getParameter");
-        String key = "";
+        String key = "authVersion";
         ParameterService instance = new ParameterService();
-        String expResult = "";
-        String result = instance.getParameter(key);
-        assertTrue(true);
+        assertNotNull(instance.getParameter(key));        
+    }
+
+        /**
+     * Test of getParameter method, of class ParameterService.
+     */
+    @Test
+    public void testUnknownParameter() {
+        System.out.println("testUnknownParameter");
+        String key = "testParameter";
+        ParameterService instance = new ParameterService();        
+        assertNull(instance.getParameter(key));        
+    }
+    
+        /**
+     * Test of getParameter method, of class ParameterService.
+     */
+    @Test
+    public void testGetNullParameter() {
+        System.out.println("testGetNullParameter");
+        String key = null;
+        ParameterService instance = new ParameterService();        
+        assertNull(instance.getParameter(key));        
     }
     
 }
