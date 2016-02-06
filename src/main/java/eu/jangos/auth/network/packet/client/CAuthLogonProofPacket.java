@@ -184,9 +184,4 @@ public class CAuthLogonProofPacket extends AbstractAuthClientPacket {
         this.securityFlag = in.readByte();        
     }
 
-    @Override
-    public void encode(ByteBuf buf) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
 }

@@ -15,13 +15,18 @@
  */
 package eu.jangos.auth.network.handler;
 
-import eu.jangos.auth.network.decoder.AuthPacketDecoder;
-import eu.jangos.auth.network.encoder.AuthPacketEncoder;
 import eu.jangos.auth.network.opcode.AuthClientCmd;
+import eu.jangos.auth.network.opcode.AuthServerCmd;
+import eu.jangos.auth.network.packet.AbstractAuthServerPacket;
 import eu.jangos.auth.network.packet.client.CAuthLogonChallengePacket;
+import eu.jangos.auth.network.packet.client.CAuthLogonProofPacket;
+import eu.jangos.auth.network.packet.server.SAuthLogonChallengePacket;
+import eu.jangos.auth.network.srp.SRPClient;
+import eu.jangos.auth.utils.BigNumber;
 import io.netty.channel.embedded.EmbeddedChannel;
 import java.net.InetAddress;
 import org.junit.After;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.junit.Before;
 
@@ -51,10 +56,12 @@ public class AuthServerHandlerTest {
      */
     @Test
     public void testLoginFlow() throws Exception {
-        System.out.println("channelRead");
+        System.out.println("testLoginFlow");
               
+        String account = "test";
+        
         CAuthLogonChallengePacket logon = new CAuthLogonChallengePacket(AuthClientCmd.CMD_AUTH_LOGON_CHALLENGE);
-        logon.setAccountName("test");
+        logon.setAccountName(account);
         logon.setAccountLength(4);
         logon.setBuild(5875);
         logon.setCountry("frFR");
@@ -65,10 +72,40 @@ public class AuthServerHandlerTest {
         logon.setOs("x86");
         logon.setTimezone(60);
         logon.setIp(InetAddress.getLocalHost());
-                                        
-        ch.writeInbound(logon);   
-        System.out.println(ch.readOutbound());
+                 
+        // First, send a challenge packet from the client.
+        ch.writeInbound(logon);
         
-        System.out.println("End channelRead");
+        AbstractAuthServerPacket response = (AbstractAuthServerPacket) ch.readOutbound();
+        
+        assertTrue(response instanceof SAuthLogonChallengePacket);        
+        
+        // Then, we should get the challenge packet from the server.
+        SAuthLogonChallengePacket sChallenge = (SAuthLogonChallengePacket) response;
+        assertTrue(sChallenge.getResult() == AuthServerCmd.AUTH_SUCCESS);
+        
+        System.out.println(response);   
+        
+        SRPClient srp = new SRPClient();
+        byte[] g = {sChallenge.getG()};                
+        
+        BigNumber M = srp.step1(account, "test", sChallenge.getB(), new BigNumber(g), sChallenge.getN(), sChallenge.getSalt());
+        
+        CAuthLogonProofPacket proof = new CAuthLogonProofPacket(AuthClientCmd.CMD_AUTH_LOGON_PROOF);
+        proof.setA(srp.getA());
+        proof.setCrc(M);
+        proof.setM(M);
+        proof.setKeyNumber((byte) 0);
+        proof.setSecurityFlag((byte) 0);
+        
+        System.out.println(proof);
+        
+        // Third, we send the proof to the server.
+        ch.writeInbound(proof);
+        
+        response = (AbstractAuthServerPacket) ch.readOutbound();                                                
+        
+        System.out.println(response);                                
     }       
+    
 }

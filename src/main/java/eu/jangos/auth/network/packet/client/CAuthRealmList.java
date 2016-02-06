@@ -47,9 +47,4 @@ public class CAuthRealmList extends AbstractAuthClientPacket {
     public void decode(ByteBuf buf) throws Exception {
         // Nothing to decode here.
     }
-
-    @Override
-    public void encode(ByteBuf buf) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

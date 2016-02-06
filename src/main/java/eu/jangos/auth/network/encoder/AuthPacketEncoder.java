@@ -41,7 +41,7 @@ public class AuthPacketEncoder extends MessageToByteEncoder<AbstractAuthServerPa
     
     @Override
     protected void encode(ChannelHandlerContext ctx, AbstractAuthServerPacket msg, ByteBuf out) throws Exception {     
-        logger.error("Context: "+ctx.name()+", packet: "+msg.toString());        
+        logger.debug("Context: "+ctx.name()+", packet: "+msg.toString());        
         msg.encode(out);        
     }
     

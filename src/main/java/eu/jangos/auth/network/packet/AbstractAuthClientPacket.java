@@ -40,7 +40,5 @@ public abstract class AbstractAuthClientPacket {
         this.opcode = opcode;
     }
     
-    public abstract void encode(ByteBuf buf) throws Exception;
-    
     public abstract void decode(ByteBuf buf) throws Exception;
 }

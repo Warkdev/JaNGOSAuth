@@ -120,7 +120,7 @@ public class SRPServer {
             System.out.println("No such algorithm available");
         }
 
-        this.hashpass = new BigNumber(hashpass).asByteArray(0, false);
+        this.hashpass = new BigNumber(hashpass).asByteArray(0, false);        
         this.I = account.getBytes();
     }
 
@@ -251,8 +251,8 @@ public class SRPServer {
             // Generate x - the Private key
             this.md.update(s.asByteArray(32));
             this.md.update(this.hashpass);
-            this.x.setBinary(this.md.digest());
-
+            this.x.setBinary(this.md.digest());            
+            
             // Generate the verifier
             if (this.v == null) {
                 this.v = this.g.modPow(this.x, this.N);
