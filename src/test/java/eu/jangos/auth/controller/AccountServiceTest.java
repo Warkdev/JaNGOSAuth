@@ -114,6 +114,8 @@ public class AccountServiceTest {
         String session = "640067444B1823BA653F6141D2F7508D213F3A213D9ED6C0A469AAD3FBB584C45458D83CF796A369";
         AccountService instance = new AccountService();
         assertTrue(instance.login(account, ip, locale, session));
+        account.setOnline(false);
+        as.update(account);
     }
 
     @Test
@@ -213,8 +215,14 @@ public class AccountServiceTest {
         // This test should return true since invalid locale are translated to a parameter in DB.
         assertTrue(instance.login(account, ip, locale, session));
 
+        account.setOnline(false);
+        as.update(account);
+        
         locale = "";
         assertTrue(instance.login(account, ip, locale, session));       
+        
+        account.setOnline(false);
+        as.update(account);
     }
 
     /**
