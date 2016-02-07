@@ -35,6 +35,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -311,8 +313,8 @@ public class AuthServerHandlerTest {
         // First, send a challenge packet from the client.
         ch.writeInbound(logon);
 
-        AbstractAuthServerPacket response = (AbstractAuthServerPacket) ch.readOutbound();       
-        
+        AbstractAuthServerPacket response = (AbstractAuthServerPacket) ch.readOutbound();
+
         assertTrue(response instanceof SAuthLogonFailedPacket);
 
         SAuthLogonFailedPacket sLogon = (SAuthLogonFailedPacket) response;
@@ -397,7 +399,8 @@ public class AuthServerHandlerTest {
 
                 // We check the code.
                 assertTrue(sLogon.getResult() == AuthServerCmd.AUTH_FAIL_UNKNOWN_ACCOUNT);
-                // Connection must be closed by server.
+                // Connection must be closed by server.                
+                
             } else {
                 assertTrue(response instanceof SAuthLogonFailedPacket);
 
@@ -405,10 +408,91 @@ public class AuthServerHandlerTest {
 
                 // We check the reason.        
                 assertTrue(sLogon.getResult() == AuthServerCmd.AUTH_FAIL_SUSPENDED);
-                
-                // Connection must now be closed by the server.
+
+                // Connection must now be closed by the server.                
             }
         }
+    }
 
+    @Test
+    /**
+     * This method is testing to send authentication packets in a wrong
+     * sequence.
+     */
+    public void testWrontPacketSequenceNoChallenge() {
+        System.out.println("testWrontPacketSequenceNoChallenge");
+
+        // First, send a challenge packet from the client.
+        ch.writeInbound(logon);
+
+        AbstractAuthServerPacket response = (AbstractAuthServerPacket) ch.readOutbound();
+
+        System.out.println(response);
+
+        // We request the realm list now.
+        CAuthRealmList cRList = new CAuthRealmList(AuthClientCmd.CMD_REALM_LIST);
+
+        ch.writeInbound(cRList);
+
+        // Server should not reply and close the session.
+        response = (AbstractAuthServerPacket) ch.readOutbound();
+
+        assertNull(response);
+        assertFalse(ch.isOpen());
+    }
+
+    @Test
+    /**
+     * This method is testing to send authentication packets in a wrong
+     * sequence.
+     */
+    public void testWrontPacketSequenceNotAuthed() {
+        System.out.println("testWrontPacketSequenceNotAuthed");
+
+        // We request the realm list now.
+        CAuthRealmList cRList = new CAuthRealmList(AuthClientCmd.CMD_REALM_LIST);
+
+        ch.writeInbound(cRList);
+
+        // Server should not reply and close the session.
+        AbstractAuthServerPacket response = (AbstractAuthServerPacket) ch.readOutbound();
+
+        assertNull(response);
+        assertFalse(ch.isOpen());
+    }
+
+    @Test
+    /**
+     * This method is testing to send authentication packets in a wrong
+     * sequence.
+     */
+    public void testWrontPacketSequenceNoHello() {
+        System.out.println("testWrontPacketSequenceNoChallenge");
+
+        BigNumber B = new BigNumber("912CDD3E0D11335DB9162D6FF9EC4F1D6B59875C6DC70FCF275AF3568D09E52");
+        BigNumber N = new BigNumber("894B645E89E1535BBDAD5B8B290650530801B18EBFBF5E8FAB3C82872A3E9BB7");
+        BigNumber g = new BigNumber("7");
+        BigNumber salt = new BigNumber("85527F8E3F3C8DBCCCAB6543D139B53B374E07B959F5D20685DAA284D272A21A");
+
+        SRPClient srp = new SRPClient();
+
+        BigNumber M = srp.step1(logon.getAccountName(), "test", B, g, N, salt);
+
+        CAuthLogonProofPacket cproof = new CAuthLogonProofPacket(AuthClientCmd.CMD_AUTH_LOGON_PROOF);
+        cproof.setA(srp.getA());
+        cproof.setCrc(M);
+        cproof.setM(M);
+        cproof.setKeyNumber((byte) 0);
+        cproof.setSecurityFlag((byte) 0);
+
+        // Third, we send the proof to the server.
+        ch.writeInbound(cproof);
+
+        // Server is then sending back its proof.
+        AbstractAuthServerPacket response = (AbstractAuthServerPacket) ch.readOutbound();        
+
+        assertNull(response);
+        
+        assertFalse(ch.isOpen());        
     }
 }
