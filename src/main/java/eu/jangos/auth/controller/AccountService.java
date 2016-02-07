@@ -128,6 +128,11 @@ public class AccountService {
             return false;
         }
         
+        if (account.isOnline()) {
+            logger.error("An account already online is attempting to login: "+account.getName());
+            return false;
+        }
+        
         if (isBanned(account, ip)) {
             logger.error("A banned account is attempting to login: "+account.getName());
             return false;

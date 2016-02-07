@@ -69,6 +69,11 @@
         <comment>Indicates whether this account is locked or not.</comment>
       </column>
     </property>
+    <property name="online" type="boolean">
+      <column name="online" not-null="true">
+        <comment>Flag value indicating whether this account is already online or not.</comment>
+      </column>
+    </property>
     <property name="lastlogin" type="timestamp">
       <column length="19" name="lastlogin" not-null="true">
         <comment>Timestamp of the last login performed by this account.</comment>

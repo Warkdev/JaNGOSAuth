@@ -99,6 +99,19 @@ public class AuthServerHandler extends ChannelInboundHandlerAdapter {
                 
                 boolean update = false;                                
                 
+                // Checking integrity of the packet.
+                if (this.cChallenge.getAccountName() == null || this.cChallenge.getAccountName().isEmpty()) {
+                    logger.debug("Context: "+ctx.name()+", account: "+this.cChallenge.getAccountName()+" : Packet integrity cannot be verified.");
+                    ((SAuthLogonFailedPacket) response).setResult(AuthServerCmd.AUTH_FAIL_UNKNOWN_ACCOUNT);
+                    break;
+                }
+                
+                if (this.cChallenge.getAccountName().length() != this.cChallenge.getAccountLength()) {
+                    logger.debug("Context: "+ctx.name()+", account: "+this.cChallenge.getAccountName()+" : Packet integrity cannot be verified.");
+                    ((SAuthLogonFailedPacket) response).setResult(AuthServerCmd.AUTH_FAIL_UNKNOWN_ACCOUNT);
+                    break;
+                }                                
+                
                 // Checking build number.
                 if (this.cChallenge.getBuild() < Integer.parseInt(parameterService.getParameter("minSupportedBuild")) || this.cChallenge.getBuild() > Integer.parseInt(parameterService.getParameter("maxSupportedBuild"))){
                     logger.debug("Context: "+ctx.name()+", account: "+this.cChallenge.getAccountName()+" : Build is not supported.");
@@ -114,6 +127,13 @@ public class AuthServerHandler extends ChannelInboundHandlerAdapter {
                 }
                 
                 this.account = this.accountService.getAccount(this.cChallenge.getAccountName());
+                
+                // Checking if account is online.
+                if(this.account.isOnline()) {
+                    logger.debug("Context: "+ctx.name()+", account: "+this.cChallenge.getAccountName()+" : Account is online.");
+                    ((SAuthLogonFailedPacket) response).setResult(AuthServerCmd.AUTH_FAIL_ALREADY_ONLINE);
+                    break;
+                }
                 
                 // Checking if account is locked.
                 if(this.account.isLocked()) {

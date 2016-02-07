@@ -24,6 +24,7 @@ public class Account  implements java.io.Serializable {
      private String lastIp;
      private int failedattempt;
      private boolean locked;
+     private boolean online;
      private Date lastlogin;
      private Set bannedaccountsForFkBannedby = new HashSet(0);
      private Set roleses = new HashSet(0);
@@ -35,13 +36,14 @@ public class Account  implements java.io.Serializable {
     }
 
 	
-    public Account(String name, String hashPass, Date creation, String lastIp, int failedattempt, boolean locked, Date lastlogin) {
+    public Account(String name, String hashPass, Date creation, String lastIp, int failedattempt, boolean locked, boolean online, Date lastlogin) {
         this.name = name;
         this.hashPass = hashPass;
         this.creation = creation;
         this.lastIp = lastIp;
         this.failedattempt = failedattempt;
         this.locked = locked;
+        this.online = online;
         this.lastlogin = lastlogin;
     }
     public Account(Locale locale, Realm realm, String name, String hashPass, String sessionkey, String verifier, String salt, String email, Date creation, String lastIp, int failedattempt, boolean locked, Date lastlogin, Set bannedaccountsForFkBannedby, Set roleses, Set bannedips, Set bannedaccountsForFkBannedaccount, Set realmAccounts) {
@@ -156,9 +158,18 @@ public class Account  implements java.io.Serializable {
     public void setLocked(boolean locked) {
         this.locked = locked;
     }
+    
+    public boolean isOnline() {
+        return this.online;
+    }
+    
+    public void setOnline(boolean online) {
+        this.online = online;
+    }
+    
     public Date getLastlogin() {
         return this.lastlogin;
-    }
+    }        
     
     public void setLastlogin(Date lastlogin) {
         this.lastlogin = lastlogin;

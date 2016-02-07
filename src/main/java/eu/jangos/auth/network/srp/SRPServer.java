@@ -267,7 +267,7 @@ public class SRPServer {
      * server public value.
      */
     public void step1() {
-        // Generate B - The server public value
+        // Generate B - The server public value - (k.v + g^b)        
         this.gmod = this.g.modPow(this.b, this.N);
         this.B = (this.v.multiply(this.k).add(this.gmod)).remainder(this.N);
     }
@@ -281,17 +281,18 @@ public class SRPServer {
      * @return True if the server recognize the proof, false otherwise.
      */
     public boolean step2(BigNumber A, BigNumber M1) {
-        // Generate u - the so called "Random scrambling parameter"                
+        // Generate u - the so called "Random scrambling parameter"
+        // H(A | B)
         this.md.update(A.asByteArray(32));
         this.md.update(this.B.asByteArray(32));
-
+               
         BigNumber u = new BigNumber();
         u.setBinary(this.md.digest());
-
-        // Generate S - the Session key
-        this.S = (A.multiply(this.v.modPow(u, this.N))).modPow(this.b, this.N);
-
-        // Generate vK - the hashed session key, hashed with H hash function
+        
+        // Generate S - the Session key - (A.v^u)^b
+        this.S = (A.multiply(this.v.modPow(u, this.N))).modPow(this.b, this.N);        
+        
+        // Generate vK - the hashed session key, hashed with H hash function        
         byte[] t = this.S.asByteArray(32);
         byte[] t1 = new byte[16];
         byte[] vK = new byte[40];
@@ -318,26 +319,32 @@ public class SRPServer {
         }
 
         // generating M - the server's SRP6 M value
+        // Formula: H(H(N)^H(g),H(I),s,A,B,K)
+        // H(N)
         this.md.update(this.N.asByteArray(32));
         byte[] hash = this.md.digest();
 
+        // H(g)
         this.md.update(this.g.asByteArray(1));
         digest = this.md.digest();
+        
+        // H(N)^H(g)
         for (int i = 0; i < 20; i++) {
             hash[i] ^= digest[i];
         }
 
         this.md.update(I);
-        byte[] t4 = new byte[20];
-        t4 = this.md.digest();
-
+        byte[] t4 = this.md.digest();
+        
         this.K = new BigNumber();
-        this.K.setBinary(vK);
+        this.K.setBinary(vK);                                
+        
         BigNumber t3 = new BigNumber();
         t3.setBinary(hash);
         BigNumber t4_correct = new BigNumber();
         t4_correct.setBinary(t4);
-
+                
+        // All together
         this.md.update(t3.asByteArray());
         this.md.update(t4_correct.asByteArray());
         this.md.update(this.s.asByteArray());
@@ -347,7 +354,7 @@ public class SRPServer {
 
         byte[] m = this.md.digest();
         this.M2 = new BigNumber();
-        this.M2.setBinary(m, false);
+        this.M2.setBinary(m, false);                                                
         
         return this.M2.equals(M1);
     }
@@ -359,6 +366,7 @@ public class SRPServer {
      * @return The Hash Logon Proof.
      */
     public byte[] generateHashLogonProof(BigNumber A) {
+        // Formula: H(A | M2 | K)       
         this.md.update(A.asByteArray(32));
         this.md.update(this.M2.asByteArray(20, false));
         this.md.update(this.K.asByteArray(40));       

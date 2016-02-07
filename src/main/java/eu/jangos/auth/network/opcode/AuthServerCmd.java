@@ -82,7 +82,7 @@ public enum AuthServerCmd {
     AUTH_FAIL_VERSION_INVALID((byte) 9),                 
     
     /**
-     * Version needs to be updated. * Not supported by jE4W *
+     * Version needs to be updated. * Not supported by JaNGOS *
      * Downloading.
      */
     AUTH_FAIL_VERSION_UPDATE((byte) 10),                 

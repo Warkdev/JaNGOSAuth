@@ -189,6 +189,16 @@ public class SAuthRealmList extends AbstractAuthServerPacket {
                 + ", NumRealms:" + this.numRealms;
 
         for (Realm r : this.listRealms) {
+            byte chars = 0;
+            // Should calculate here the number of chars on this realm.
+                for(RealmAccount rel : (Set<RealmAccount>) account.getRealmAccounts())
+                {
+                    if(rel.getId().getFkRealm() == r.getId())
+                    {
+                        chars = (byte) rel.getNumChars();
+                    }
+                }
+            
             toString += " [ type:" + r.getRealmtype().getId()
                     + ", invalid:" + r.isInvalid()
                     + ", offline:" + r.isOffline()
@@ -198,7 +208,7 @@ public class SAuthRealmList extends AbstractAuthServerPacket {
                     + ", name:" + r.getName()
                     + ", address:" + r.getAddress() + ":" + r.getPort()
                     + ", population:" + r.getPopulation()
-                    + ", characters:" + 0
+                    + ", characters:" + chars
                     + ", timezone:" + r.getRealmtimezone().getId()
                     + ", unknown:" + 0
                     + "]";

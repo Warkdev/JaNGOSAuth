@@ -64,6 +64,10 @@ public class BigNumber {
         return new BigNumber(bigInteger.multiply(val.getInt()));
     }
 
+    public BigNumber substract(BigNumber val) {
+        return new BigNumber(bigInteger.subtract(val.getInt()));
+    }
+    
     public BigNumber remainder(BigNumber val) {
         return new BigNumber(bigInteger.remainder(val.getInt()));
     }

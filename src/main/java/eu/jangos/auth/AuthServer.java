@@ -32,6 +32,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.timeout.ReadTimeoutHandler;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import org.slf4j.Logger;
@@ -54,6 +55,7 @@ public class AuthServer {
     static final int PORT = Integer.parseInt(ps.getParameter("authPort"));
     static InetAddress HOST;
     static final String VERSION = ps.getParameter("authVersion");
+    static final int TIMEOUT = Integer.parseInt(ps.getParameter("authTimeout"));
     
     /**
      * Main of the AuthServer program.
@@ -89,7 +91,7 @@ public class AuthServer {
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline p = ch.pipeline();
-                            p.addLast(new AuthPacketDecoder(), new AuthPacketEncoder(), new AuthServerHandler());
+                            p.addLast(new AuthPacketDecoder(), new AuthPacketEncoder(), new ReadTimeoutHandler(TIMEOUT), new AuthServerHandler());
                         }
                     });
 
