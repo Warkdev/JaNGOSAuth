@@ -19,12 +19,29 @@ import eu.jangos.auth.model.Account;
 import java.util.Date;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.BeforeClass;
 
 /**
  * AccountServiceTest is the Unit & Integration class for Account testing.
+ *
  * @author Warkdev
  */
 public class AccountServiceTest {
+
+    static AccountService as;
+
+    @BeforeClass
+    public static void before() {
+        as = new AccountService();
+    }
+
+    @Before
+    public void setUp() {
+        Account account = as.getAccount("test");
+        account.setOnline(false);
+        as.update(account);
+    }
 
     /**
      * Test of getAccount method, of class AccountService.
@@ -114,8 +131,6 @@ public class AccountServiceTest {
         String session = "640067444B1823BA653F6141D2F7508D213F3A213D9ED6C0A469AAD3FBB584C45458D83CF796A369";
         AccountService instance = new AccountService();
         assertTrue(instance.login(account, ip, locale, session));
-        account.setOnline(false);
-        as.update(account);
     }
 
     @Test
@@ -144,7 +159,7 @@ public class AccountServiceTest {
     @Test
     public void testLoginAccountLocked() {
         System.out.println("testLoginAccountLocked");
-        String name = "locked";        
+        String name = "locked";
         String ip = "127.0.0.1";
         String locale = "frFR";
         String session = "640067444B1823BA653F6141D2F7508D213F3A213D9ED6C0A469AAD3FBB584C45458D83CF796A369";
@@ -152,11 +167,11 @@ public class AccountServiceTest {
         Account account = instance.getAccount(name);
         assertFalse(instance.login(account, ip, locale, session));
     }
-    
+
     @Test
     public void testLoginAccountBanned() {
         System.out.println("testLoginAccountBanned");
-        String name = "banned";        
+        String name = "banned";
         String ip = "127.0.0.1";
         String locale = "frFR";
         String session = "640067444B1823BA653F6141D2F7508D213F3A213D9ED6C0A469AAD3FBB584C45458D83CF796A369";
@@ -164,11 +179,11 @@ public class AccountServiceTest {
         Account account = instance.getAccount(name);
         assertFalse(instance.login(account, ip, locale, session));
     }
-    
-        @Test
+
+    @Test
     public void testLoginAccountOnline() {
         System.out.println("testLoginAccountOnline");
-        String name = "online";        
+        String name = "online";
         String ip = "127.0.0.1";
         String locale = "frFR";
         String session = "640067444B1823BA653F6141D2F7508D213F3A213D9ED6C0A469AAD3FBB584C45458D83CF796A369";
@@ -176,7 +191,7 @@ public class AccountServiceTest {
         Account account = instance.getAccount(name);
         assertFalse(instance.login(account, ip, locale, session));
     }
-    
+
     @Test
     public void testLoginInvalidIP() {
         System.out.println("testLoginInvalidIP");
@@ -217,12 +232,9 @@ public class AccountServiceTest {
 
         account.setOnline(false);
         as.update(account);
-        
+
         locale = "";
-        assertTrue(instance.login(account, ip, locale, session));       
-        
-        account.setOnline(false);
-        as.update(account);
+        assertTrue(instance.login(account, ip, locale, session));
     }
 
     /**
@@ -231,38 +243,38 @@ public class AccountServiceTest {
     @Test
     public void testNotBanned() {
         System.out.println("testNotBanned");
-        String name = "test";        
+        String name = "test";
         String ip = "127.0.0.1";
         AccountService instance = new AccountService();
-        Account account = instance.getAccount(name);                
-        assertFalse(instance.isBanned(account, ip));        
+        Account account = instance.getAccount(name);
+        assertFalse(instance.isBanned(account, ip));
     }
-    
+
     @Test
     public void testIPBanned() {
         System.out.println("testIPBanned");
-        String name = "test";        
+        String name = "test";
         String ip = "153.124.12.1";
         AccountService instance = new AccountService();
-        Account account = instance.getAccount(name);                
-        assertTrue(instance.isBanned(account, ip));        
+        Account account = instance.getAccount(name);
+        assertTrue(instance.isBanned(account, ip));
     }
-    
+
     @Test
     public void testAccountBanned() {
         System.out.println("testAccountBanned");
-        String name = "banned";        
+        String name = "banned";
         String ip = "127.0.0.1";
         AccountService instance = new AccountService();
-        Account account = instance.getAccount(name);                
-        assertTrue(instance.isBanned(account, ip));        
+        Account account = instance.getAccount(name);
+        assertTrue(instance.isBanned(account, ip));
     }
-    
-        @Test
+
+    @Test
     public void testNullAccountBanned() {
         System.out.println("testNullAccountBanned");
         Account account = null;
-        String ip = "127.0.0.1";        
+        String ip = "127.0.0.1";
         AccountService instance = new AccountService();
         assertTrue(instance.isBanned(account, ip));
     }
@@ -272,20 +284,20 @@ public class AccountServiceTest {
         System.out.println("testInvalidAccountBanned");
         String name = "dont exist";
         Account account = new Account(name, "AAAAAAA", new Date(), "0.0.0.0", 0, false, false, new Date());
-        String ip = "127.0.0.1";        
+        String ip = "127.0.0.1";
         AccountService instance = new AccountService();
         assertTrue(instance.isBanned(account, ip));
     }
-    
+
     @Test
     public void testInvalidIPBanned() {
         System.out.println("testInvalidIPBanned");
-        String name = "test";        
+        String name = "test";
         String ip = "389.0.0.1";
         AccountService instance = new AccountService();
-        Account account = instance.getAccount(name);                
-        assertTrue(instance.isBanned(account, ip));    
-        
+        Account account = instance.getAccount(name);
+        assertTrue(instance.isBanned(account, ip));
+
         ip = "127.0.1";
         assertTrue(instance.isBanned(account, ip));
 
@@ -298,38 +310,37 @@ public class AccountServiceTest {
         ip = null;
         assertTrue(instance.isBanned(account, ip));
     }
-        
+
     /**
      * Test of updateFailedAttempt method, of class AccountService.
      */
     @Test
     public void testUpdateFailedAttemptLocked() {
         System.out.println("updateFailedAttempt");
-        String name = "test";       
+        String name = "test";
         AccountService instance = new AccountService();
         Account account = instance.getAccount(name);
         ParameterService ps = new ParameterService();
-        
+
         // We retrieve the maximum number of attempt before a locking
         int max = Integer.parseInt(ps.getParameter("maxFailedAttempt"));
-        
+
         // First of all, we make sure that the account has no failed attempt.
         account.setFailedattempt(0);
         account.setLocked(false);
         instance.update(account);
-        
+
         // Then, we update the counter.
-        for(int i = 0; i<= max; i++)
-        {
-            instance.updateFailedAttempt(account);  
+        for (int i = 0; i <= max; i++) {
+            instance.updateFailedAttempt(account);
         }
-          
+
         // Then, we validate that the account is locked.
         assertTrue(account.isLocked());
-        
+
         // Finally, we set back the account to a normal situation.
         account.setFailedattempt(0);
         account.setLocked(false);
         instance.update(account);
-    }    
+    }
 }
