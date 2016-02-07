@@ -158,6 +158,7 @@ public class AccountService {
         account.setLastlogin(new Date());
         account.setLocale(this.ls.getLocaleForString(locale));
         account.setSessionkey(session);
+        account.setOnline(true);
 
         update(account);
 
