@@ -39,6 +39,7 @@ CREATE TABLE `account` (
   `lastlogin` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Timestamp of the last login performed by this account.',
   `fk_prefrealm` int(11) DEFAULT NULL COMMENT 'ID of the preferred realm for this account.',
   `fk_locale` int(11) DEFAULT NULL COMMENT 'The locale used by this client',
+  `online` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Flag value indicating whether this account is already online or not.',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`),
   KEY `fk_account_locale_idx` (`fk_locale`),
@@ -271,4 +272,4 @@ CREATE TABLE `roles` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-02-04 16:51:53
+-- Dump completed on 2016-02-07 13:53:00
