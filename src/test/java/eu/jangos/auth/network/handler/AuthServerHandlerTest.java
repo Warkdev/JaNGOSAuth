@@ -425,9 +425,7 @@ public class AuthServerHandlerTest {
         // First, send a challenge packet from the client.
         ch.writeInbound(logon);
 
-        AbstractAuthServerPacket response = (AbstractAuthServerPacket) ch.readOutbound();
-
-        System.out.println(response);
+        AbstractAuthServerPacket response = (AbstractAuthServerPacket) ch.readOutbound();       
 
         // We request the realm list now.
         CAuthRealmList cRList = new CAuthRealmList(AuthClientCmd.CMD_REALM_LIST);
