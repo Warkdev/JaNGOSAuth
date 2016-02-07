@@ -79,6 +79,12 @@ public class AuthServerHandlerTest {
 
     @After
     public void tearDown() {
+        AccountService as = new AccountService();
+        
+        Account account = as.getAccount("TEST");
+        account.setOnline(false);
+        as.update(account);
+        
         ch.close();
     }
 
