@@ -166,7 +166,7 @@ public class AccountServiceTest {
         @Test
     public void testLoginAccountOnline() {
         System.out.println("testLoginAccountOnline");
-        String name = "test";        
+        String name = "online";        
         String ip = "127.0.0.1";
         String locale = "frFR";
         String session = "640067444B1823BA653F6141D2F7508D213F3A213D9ED6C0A469AAD3FBB584C45458D83CF796A369";
