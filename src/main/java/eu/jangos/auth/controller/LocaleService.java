@@ -48,10 +48,10 @@ public class LocaleService {
         
         Locale l;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            l = (Locale) session.createCriteria(Locale.class).add(Restrictions.like("localeString", locale)).uniqueResult();
+            l = (Locale) session.createCriteria(Locale.class).add(Restrictions.like("localeString", locale)).uniqueResult();                        
             
             if(l == null)
-                return getDefaultLocale();
+                return getDefaultLocale();                        
             
             logger.debug("Locale found, returning "+l.getLocale());
             return l;
@@ -71,7 +71,8 @@ public class LocaleService {
         Locale l;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             l = (Locale) session.createCriteria(Locale.class).add(Restrictions.like("localeString", locale)).uniqueResult();
-            logger.debug("Locale found, returning "+l.getLocale());
+            logger.debug("Locale found, returning "+l.getLocale());                        
+            
             return l;
         } catch (HibernateException he) {
             logger.debug("No default locale found, returning null.");

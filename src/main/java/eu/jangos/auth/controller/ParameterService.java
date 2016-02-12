@@ -47,7 +47,7 @@ public class ParameterService {
             Parameter1 parameter = (Parameter1) session.createCriteria(Parameter1.class).add(Restrictions.eq("param", key)).uniqueResult();
             
             if(parameter == null)
-                return null;
+                return null;                                                
             
             return parameter.getVal();            
         } catch (HibernateException he) {

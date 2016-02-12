@@ -40,7 +40,9 @@ public class RealmService {
         logger.debug("Returning all realms");
                 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createCriteria(Realm.class).list();
+            List<Realm> listRealms = session.createCriteria(Realm.class).list();            
+            
+            return listRealms;
         } catch (HibernateException he) {
             return null;
         }

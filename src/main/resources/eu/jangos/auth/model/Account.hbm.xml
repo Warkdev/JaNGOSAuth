@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated 01-f?vr.-2016 22:32:31 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-  <class catalog="jangosauth" name="eu.jangos.auth.model.Account" optimistic-lock="version" table="account">
+  <class catalog="jangosauth" name="eu.jangos.auth.model.Account" optimistic-lock="version" table="account">      
     <id name="id" type="java.lang.Integer">
       <column name="id"/>
       <generator class="identity"/>
