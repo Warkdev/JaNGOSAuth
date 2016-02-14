@@ -21,7 +21,6 @@ import eu.jangos.auth.controller.AccountService;
 import eu.jangos.auth.controller.ParameterService;
 import eu.jangos.auth.controller.RealmService;
 import eu.jangos.auth.exception.AuthStepException;
-import eu.jangos.auth.hibernate.HibernateUtil;
 import eu.jangos.auth.model.Account;
 import eu.jangos.auth.network.opcode.AuthClientCmd;
 import eu.jangos.auth.network.opcode.AuthServerCmd;
@@ -225,7 +224,7 @@ public class AuthServerHandler extends ChannelInboundHandlerAdapter {
                 // Creating Realm packet.
                 this.sRealm = new SAuthRealmList(AuthClientCmd.CMD_REALM_LIST);
                 
-                // Setting realms.
+                // Setting realms.                
                 this.sRealm.addRealms(realmService.getAllRealms());
                 
                 // Set accountID.
