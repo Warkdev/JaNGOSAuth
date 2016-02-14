@@ -22,6 +22,7 @@ import eu.jangos.auth.controller.ParameterService;
 import eu.jangos.auth.controller.RealmService;
 import eu.jangos.auth.exception.AuthStepException;
 import eu.jangos.auth.model.Account;
+import eu.jangos.auth.model.Realm;
 import eu.jangos.auth.network.opcode.AuthClientCmd;
 import eu.jangos.auth.network.opcode.AuthServerCmd;
 import eu.jangos.auth.network.packet.AbstractAuthClientPacket;
@@ -220,6 +221,12 @@ public class AuthServerHandler extends ChannelInboundHandlerAdapter {
             case CMD_REALM_LIST:                
                 if(step != AuthStep.STEP_PROOF && step != AuthStep.STEP_REALM)
                     throw new AuthStepException("Step state is invalid.");
+                
+                // At each realm list demand, we recalculate population of realms.
+                for(Realm r : realmService.getAllRealms())
+                {
+                    realmService.calculatePopulation(r);
+                }
                 
                 // Creating Realm packet.
                 this.sRealm = new SAuthRealmList(AuthClientCmd.CMD_REALM_LIST);

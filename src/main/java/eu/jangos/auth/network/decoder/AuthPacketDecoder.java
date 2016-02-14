@@ -70,6 +70,8 @@ public class AuthPacketDecoder extends ByteToMessageDecoder {
             case CMD_REALM_LIST:
                 packet = new CAuthRealmList(code);                
                 break;
+            case CMD_AUTH_RECONNECT_CHALLENGE:
+            case CMD_AUTH_RECONNECT_PROOF:
             default:
                 logger.error("Context: " + ctx.name() + "Packet received, opcode not supported: " + code);
                 msg.clear();
