@@ -8,6 +8,7 @@ jdk:
 branches:
  only:
    - master
+   - development
 before_install:
  - mysql --user root < /home/travis/build/Warkdev/JaNGOSAuth/database/structure.sql
  - mysql --user root jangosauth < /home/travis/build/Warkdev/JaNGOSAuth/database/data.sql
