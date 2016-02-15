@@ -22,6 +22,7 @@ import eu.jangos.auth.controller.ParameterService;
 import eu.jangos.auth.controller.RealmService;
 import eu.jangos.auth.exception.AuthStepException;
 import eu.jangos.auth.model.Account;
+import eu.jangos.auth.model.Realm;
 import eu.jangos.auth.network.opcode.AuthClientCmd;
 import eu.jangos.auth.network.opcode.AuthServerCmd;
 import eu.jangos.auth.network.packet.AbstractAuthClientPacket;
@@ -221,10 +222,16 @@ public class AuthServerHandler extends ChannelInboundHandlerAdapter {
                 if(step != AuthStep.STEP_PROOF && step != AuthStep.STEP_REALM)
                     throw new AuthStepException("Step state is invalid.");
                 
+                // At each realm list demand, we recalculate population of realms.
+                for(Realm r : realmService.getAllRealms())
+                {
+                    realmService.calculatePopulation(r);
+                }
+                
                 // Creating Realm packet.
                 this.sRealm = new SAuthRealmList(AuthClientCmd.CMD_REALM_LIST);
                 
-                // Setting realms.
+                // Setting realms.                
                 this.sRealm.addRealms(realmService.getAllRealms());
                 
                 // Set accountID.
@@ -239,7 +246,7 @@ public class AuthServerHandler extends ChannelInboundHandlerAdapter {
         }
 
         logger.debug("Context: "+ctx.name()+", account: "+this.cChallenge.getAccountName()+", response: "+response);
-
+                
         ctx.writeAndFlush(response);
     }
 
@@ -248,6 +255,17 @@ public class AuthServerHandler extends ChannelInboundHandlerAdapter {
         ctx.flush();
     }
 
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        // We have a logged in account that will finally disconnect before login into realm.       
+        if(step == AuthStep.STEP_REALM)
+        {
+            this.account.setOnline(false);
+            this.accountService.update(account);
+        }
+        super.channelInactive(ctx);
+    }    
+    
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         ctx.close();
