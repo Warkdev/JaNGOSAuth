@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `jangosauth` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `jangosauth`;
 -- MySQL dump 10.13  Distrib 5.6.24, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: jangosauth
@@ -36,7 +34,7 @@ CREATE TABLE `account` (
   `lastIP` varchar(30) NOT NULL DEFAULT '0.0.0.0' COMMENT 'Last IP used for this account.',
   `failedattempt` int(11) NOT NULL DEFAULT '0' COMMENT 'Number of failed attempt made for this account.',
   `locked` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Indicates whether this account is locked or not.',
-  `lastlogin` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Timestamp of the last login performed by this account.',
+  `lastlogin` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Timestamp of the last login performed by this account.',
   `fk_prefrealm` int(11) DEFAULT NULL COMMENT 'ID of the preferred realm for this account.',
   `fk_locale` int(11) DEFAULT NULL COMMENT 'The locale used by this client',
   `online` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Flag value indicating whether this account is already online or not.',
@@ -45,8 +43,8 @@ CREATE TABLE `account` (
   KEY `fk_account_locale_idx` (`fk_locale`),
   KEY `fk_account_realm_idx` (`fk_prefrealm`),
   CONSTRAINT `fk_account_locale` FOREIGN KEY (`fk_locale`) REFERENCES `locale` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_account_realm` FOREIGN KEY (`fk_prefrealm`) REFERENCES `realm` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1 COMMENT='Account table represents an jE4W account compatible with WoW client v1.12.1.';
+  CONSTRAINT `fk_account_realm` FOREIGN KEY (`fk_prefrealm`) REFERENCES `realm` (`id`) ON DELETE SET NULL ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1 COMMENT='Account table represents an jE4W account compatible with WoW client v1.12.1.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -86,7 +84,7 @@ CREATE TABLE `bannedaccount` (
   KEY `fk_banisher_account_idx` (`fk_bannedby`),
   CONSTRAINT `fk_ban_account` FOREIGN KEY (`fk_bannedaccount`) REFERENCES `account` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_banisher_account` FOREIGN KEY (`fk_bannedby`) REFERENCES `account` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1 COMMENT='Banned account represents all the account banned records with the reasons given.';
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1 COMMENT='Banned account represents all the account banned records with the reasons given.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -169,7 +167,7 @@ CREATE TABLE `parameter1` (
   `param` varchar(50) NOT NULL COMMENT 'key of the parameter',
   `val` longtext NOT NULL COMMENT 'Value of the parameter.',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1 COMMENT='Table parameters contains a range of parameters ordered following key/value';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1 COMMENT='Table parameters contains a range of parameters ordered following key/value';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -199,7 +197,7 @@ CREATE TABLE `realm` (
   KEY `fk_realm_timezone_idx` (`fk_timezone`),
   CONSTRAINT `fk_realm_timezone` FOREIGN KEY (`fk_timezone`) REFERENCES `realmtimezone` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_realm_type` FOREIGN KEY (`fk_realmtype`) REFERENCES `realmtype` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1 COMMENT='Representation of all the realms known by this authentication server.';
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1 COMMENT='Representation of all the realms known by this authentication server.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -260,7 +258,7 @@ CREATE TABLE `roles` (
   `name` varchar(20) NOT NULL COMMENT 'Name of the role',
   `description` varchar(200) NOT NULL COMMENT 'A short description about the role.',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='This table holds all the roles defined for security purposes.';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='This table holds all the roles defined for security purposes.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -272,4 +270,4 @@ CREATE TABLE `roles` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-02-07 13:53:00
+-- Dump completed on 2016-02-19 17:38:02
