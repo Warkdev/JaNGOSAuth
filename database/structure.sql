@@ -37,7 +37,7 @@ CREATE TABLE `account` (
   `lastIP` varchar(30) NOT NULL DEFAULT '0.0.0.0' COMMENT 'Last IP used for this account.',
   `failedattempt` int(11) NOT NULL DEFAULT '0' COMMENT 'Number of failed attempt made for this account.',
   `locked` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Indicates whether this account is locked or not.',
-  `lastlogin` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Timestamp of the last login performed by this account.',
+  `lastlogin` timestamp NOT NULL COMMENT 'Timestamp of the last login performed by this account.',
   `fk_prefrealm` int(11) DEFAULT NULL COMMENT 'ID of the preferred realm for this account.',
   `fk_locale` int(11) DEFAULT NULL COMMENT 'The locale used by this client',
   `online` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Flag value indicating whether this account is already online or not.',
