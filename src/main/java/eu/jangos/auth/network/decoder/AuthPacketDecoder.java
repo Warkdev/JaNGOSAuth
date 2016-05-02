@@ -20,6 +20,7 @@ import eu.jangos.auth.network.packet.AbstractAuthClientPacket;
 import eu.jangos.auth.network.packet.client.CAuthLogonChallengePacket;
 import eu.jangos.auth.network.packet.client.CAuthLogonProofPacket;
 import eu.jangos.auth.network.packet.client.CAuthRealmList;
+import eu.jangos.auth.network.packet.client.CAuthReconnectProofPacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -34,7 +35,8 @@ import org.slf4j.LoggerFactory;
  * understandable packet manageable by the authentication server.
  *
  * The decoder currently supports the following WoW packets: -
- * CMD_AUTH_LOGON_CHALLENGE - CMD_AUTH_LOGON_PROOF - CMD_REALM_LIST
+ * CMD_AUTH_LOGON_CHALLENGE - CMD_AUTH_LOGON_PROOF - CMD_REALM_LIST - CMD_AUTH_RECONNECT_CHALLENGE
+ * - CMD_AUTH_RECONNECT_PROOF
  *
  * @author Warkdev
  * @version v0.1 BETA.
@@ -70,8 +72,12 @@ public class AuthPacketDecoder extends ByteToMessageDecoder {
             case CMD_REALM_LIST:
                 packet = new CAuthRealmList(code);                
                 break;
-            case CMD_AUTH_RECONNECT_CHALLENGE:
+            case CMD_AUTH_RECONNECT_CHALLENGE:                
+                packet = new CAuthLogonChallengePacket(code);
+                break;
             case CMD_AUTH_RECONNECT_PROOF:
+                packet = new CAuthReconnectProofPacket(code);
+                break;
             default:
                 logger.error("Context: " + ctx.name() + "Packet received, opcode not supported: " + code);
                 msg.clear();

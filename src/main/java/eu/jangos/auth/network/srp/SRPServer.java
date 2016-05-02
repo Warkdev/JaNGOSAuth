@@ -374,6 +374,16 @@ public class SRPServer {
         return this.md.digest();
     }
 
+    public byte[] generateHashReconnectProof(BigNumber R1, BigNumber challenge, BigNumber sessionKey) {
+        // Formula: H(account | R1 | challenge | session key)        
+        this.md.update(this.I);
+        this.md.update(R1.asByteArray(16));
+        this.md.update(challenge.asByteArray(16));
+        this.md.update(sessionKey.asByteArray(40));
+        
+        return this.md.digest();        
+    }
+    
     @Override
     public String toString() {
         String toString = "";

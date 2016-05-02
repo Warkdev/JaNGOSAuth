@@ -19,6 +19,8 @@ import eu.jangos.auth.network.opcode.AuthClientCmd;
 import eu.jangos.auth.network.opcode.AuthServerCmd;
 import eu.jangos.auth.network.packet.server.SAuthLogonChallengePacket;
 import eu.jangos.auth.network.packet.server.SAuthLogonProofPacket;
+import eu.jangos.auth.network.packet.server.SAuthReconnectChallengePacket;
+import eu.jangos.auth.network.packet.server.SAuthReconnectProofPacket;
 import eu.jangos.auth.network.srp.SRPServer;
 
 /**
@@ -91,6 +93,18 @@ public class AuthUtils {
         proof.setBinary(b);        
         
         sPacket.setProof(proof);
+
+        return sPacket;
+    }
+    
+    /**
+     * Generates an SAuthReconnectProofPacket from a byte proof.
+     * @param b The proof, in an array of bytes, calculated by the server.
+     * @return The generated packet.
+     * @see SAuthLogonProofPacket
+     */
+    public static SAuthReconnectProofPacket generateSAuthReconnectProofPacket(byte[] b) {
+        SAuthReconnectProofPacket sPacket = new SAuthReconnectProofPacket(AuthClientCmd.CMD_AUTH_RECONNECT_PROOF);
 
         return sPacket;
     }
