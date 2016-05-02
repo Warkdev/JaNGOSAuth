@@ -44,12 +44,19 @@ public class BannedAccountService {
             return true;
         }         
                         
-        try(Session session = HibernateUtil.getSessionFactory().openSession()) {            
-            return (session.createCriteria(Bannedaccount.class)
-                .add(Restrictions.and(
-                        Restrictions.like("accountByFkBannedaccount", account),
+        try(Session session = HibernateUtil.getSessionFactory().openSession()) { 
+            Bannedaccount banInfo = (Bannedaccount) session.createCriteria(Bannedaccount.class)
+                    .add(Restrictions.and(
+                        Restrictions.eq("accountByFkBannedaccount", account),
                         Restrictions.eq("active", true)))
-                .uniqueResult() != null);                        
+                .uniqueResult();                        
+            
+            if(banInfo == null)
+            {
+                return false;
+            }                        
+            
+            return true;
         } catch (HibernateException he) {
             return true;
         }        

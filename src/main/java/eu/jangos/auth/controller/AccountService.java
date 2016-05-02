@@ -61,12 +61,13 @@ public class AccountService {
             logger.error("The account name must contain only alphanumeric values.");
             return null;
         }       
-
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Account account = (Account) session.createCriteria(Account.class)
+               
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {                                            
+            Account account = (Account) session.createCriteria(Account.class)                    
                     .add(Restrictions.like("name", name))
-                    .setFetchMode("realmAccounts", FetchMode.JOIN)
+                    .setFetchMode("realmAccounts", FetchMode.JOIN)                    
                     .uniqueResult();            
+                                    
             return account;
         } catch (HibernateException he) {            
             logger.error("There was an error connecting to the database.");
@@ -82,7 +83,7 @@ public class AccountService {
      * @return true if an account with the given name exists in the database,
      * false otherwise.
      */
-    public boolean checkExistence(String name) {
+    public boolean checkExistence(String name) {                
         // Empty names are not allowed.
         if (name == null || name.isEmpty()) {
             logger.error("The account name is null or empty.");
@@ -94,8 +95,17 @@ public class AccountService {
             return false;
         }
         
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {               
-            return (session.createCriteria(Account.class).add(Restrictions.like("name", name)).uniqueResult() != null);                                   
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Account account = (Account) session.createCriteria(Account.class)
+                    .add(Restrictions.like("name", name))
+                    .uniqueResult();
+            
+            if(account == null)
+            {
+                return false;
+            }                        
+                    
+            return true;                                   
         } catch (HibernateException he) {           
             logger.error("There was an error connecting to the database.");                        
             return false;
@@ -236,12 +246,12 @@ public class AccountService {
      */
     public void update(Account account) {
         if (account == null) {
-            logger.error("Account trying to login is null.");
+            logger.error("Account to update is null.");
             return;
         }
 
         if (!checkExistence(account.getName())) {
-            logger.error("Account trying to login does not exist.");
+            logger.error("Account to update does not exist.");
             return;
         }
 
@@ -249,8 +259,8 @@ public class AccountService {
             session.beginTransaction();
             session.merge(account);
             session.flush();
-            session.getTransaction().commit();            
-            logger.info("Account " + account.getName() + " updated.");            
+            session.getTransaction().commit();                                 
+            logger.info("Account " + account.getName() + " updated.");                        
         } catch (HibernateException he) {
             logger.error("There was an issue while updating account " + account.getName());
         }

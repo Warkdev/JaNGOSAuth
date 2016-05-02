@@ -10,7 +10,7 @@
         <appender-ref ref="STDOUT"/>
     </root>
 
-    <logger name="io.netty" level="WARN"/>
-    <logger name="i.n" level="WARN"/>
-    <logger name="eu.jangos" level="WARN"/>
+    <logger name="io.netty" level="INFO"/>
+    <logger name="i.n" level="INFO"/>
+    <logger name="eu.jangos" level="INFO"/>
 </configuration>

@@ -35,7 +35,8 @@ import org.slf4j.LoggerFactory;
  * understandable packet manageable by the authentication server.
  *
  * The decoder currently supports the following WoW packets: -
- * CMD_AUTH_LOGON_CHALLENGE - CMD_AUTH_LOGON_PROOF - CMD_REALM_LIST
+ * CMD_AUTH_LOGON_CHALLENGE - CMD_AUTH_LOGON_PROOF - CMD_REALM_LIST - CMD_AUTH_RECONNECT_CHALLENGE
+ * - CMD_AUTH_RECONNECT_PROOF
  *
  * @author Warkdev
  * @version v0.1 BETA.

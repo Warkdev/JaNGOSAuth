@@ -50,11 +50,18 @@ public class BannedIPService {
         }        
         
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return (session.createCriteria(Bannedip.class)
+            Bannedip banInfo = (Bannedip) session.createCriteria(Bannedip.class)
                     .add(Restrictions.and(
                             Restrictions.like("ip", ip),
                             Restrictions.eq("active", true)))
-                    .uniqueResult() != null);
+                    .uniqueResult();
+            
+            if(banInfo == null)
+            {
+                return false;
+            }                        
+            
+            return true;
         } catch(HibernateException he) {
             return true;
         }                
