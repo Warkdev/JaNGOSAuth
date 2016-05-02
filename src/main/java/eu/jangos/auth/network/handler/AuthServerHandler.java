@@ -28,10 +28,13 @@ import eu.jangos.auth.network.packet.AbstractAuthClientPacket;
 import eu.jangos.auth.network.packet.AbstractAuthServerPacket;
 import eu.jangos.auth.network.packet.client.CAuthLogonChallengePacket;
 import eu.jangos.auth.network.packet.client.CAuthLogonProofPacket;
+import eu.jangos.auth.network.packet.client.CAuthReconnectProofPacket;
 import eu.jangos.auth.network.packet.server.SAuthLogonChallengePacket;
 import eu.jangos.auth.network.packet.server.SAuthLogonFailedPacket;
 import eu.jangos.auth.network.packet.server.SAuthLogonProofPacket;
 import eu.jangos.auth.network.packet.server.SAuthRealmList;
+import eu.jangos.auth.network.packet.server.SAuthReconnectChallengePacket;
+import eu.jangos.auth.network.packet.server.SAuthReconnectProofPacket;
 import eu.jangos.auth.network.srp.SRPServer;
 import eu.jangos.auth.utils.AuthUtils;
 import eu.jangos.auth.utils.BigNumber;
@@ -61,6 +64,9 @@ public class AuthServerHandler extends ChannelInboundHandlerAdapter {
     private CAuthLogonProofPacket cProof;
     private SAuthLogonProofPacket sProof;    
     private SAuthRealmList sRealm;
+    private SAuthReconnectChallengePacket sRChallenge;
+    private CAuthReconnectProofPacket cRProof;
+    private SAuthReconnectProofPacket sRProof;
     
     private Account account;
     private final AccountService accountService;
@@ -217,6 +223,72 @@ public class AuthServerHandler extends ChannelInboundHandlerAdapter {
                 }                                             
 
                 break;
+            case CMD_AUTH_RECONNECT_CHALLENGE:                
+                if(step != AuthStep.STEP_INIT)
+                    throw new AuthStepException("Step state is invalid.");
+                
+                this.cChallenge = (CAuthLogonChallengePacket) request;
+                
+                this.account = this.accountService.getAccount(this.cChallenge.getAccountName());
+                
+                // If not found, we must close the session.
+                if(this.account == null)
+                {
+                    logger.debug("Context: "+ctx.name()+", account: "+this.cChallenge.getAccountName()+" : Account does not exist.");
+                    ctx.close();
+                    break;
+                }
+                
+                // Account name is incorrect, we close the session.
+                if(!this.account.getName().equals(this.cChallenge.getAccountName()))
+                {
+                    logger.debug("Context: "+ctx.name()+", account: "+this.cChallenge.getAccountName()+" : Incorrect account.");
+                    ctx.close();
+                    break;
+                }
+                
+                // Account does not have any session key.
+                if(this.account.getSessionkey() == null || this.account.getSessionkey().isEmpty())
+                {
+                    logger.debug("Context: "+ctx.name()+", account: "+this.cChallenge.getAccountName()+" : No session key.");
+                    ctx.close();
+                    break;
+                }
+                
+                this.srp = new SRPServer(this.account.getHashPass(), this.account.getName());                                
+                
+                this.sRChallenge = new SAuthReconnectChallengePacket(AuthClientCmd.CMD_AUTH_RECONNECT_CHALLENGE);    
+                this.sRChallenge.setResult(AuthServerCmd.AUTH_SUCCESS);
+                this.sRChallenge.setChallenge(new BigNumber().setRand(16));
+                
+                response = this.sRChallenge;
+                
+                this.step = AuthStep.STEP_PROOF;
+                
+                break;
+            case CMD_AUTH_RECONNECT_PROOF:
+                if(step != AuthStep.STEP_PROOF)
+                    throw new AuthStepException("Step state is invalid.");
+                
+                this.cRProof = (CAuthReconnectProofPacket) request;                                
+                
+                byte[] hashReconnect = this.srp.generateHashReconnectProof(this.cRProof.getR1(), this.sRChallenge.getChallenge(), new BigNumber(account.getSessionkey(), 16));
+                BigNumber hash = new BigNumber();
+                hash.setBinary(hashReconnect, false);
+                
+                // We check if the server has the same hash than the client.
+                if(hash.equals(this.cRProof.getR2()))
+                {                    
+                    this.sRProof = AuthUtils.generateSAuthReconnectProofPacket(hashReconnect);
+                
+                    response = sRProof;
+                    
+                    this.step = AuthStep.STEP_REALM;
+                } else {
+                    logger.debug("Context: "+ctx.name()+", account: "+this.cChallenge.getAccountName()+" : Incorrect proof sent by the client.");
+                }                                                                
+                
+                break;            
             case CMD_REALM_LIST:                
                 if(step != AuthStep.STEP_PROOF && step != AuthStep.STEP_REALM)
                     throw new AuthStepException("Step state is invalid.");
@@ -233,7 +305,7 @@ public class AuthServerHandler extends ChannelInboundHandlerAdapter {
                 response = this.sRealm;
                 this.step = AuthStep.STEP_REALM;
                 
-                break;
+                break;                
             default:
                 logger.error("Context: "+ctx.name()+", account: "+this.cChallenge.getAccountName()+" : Opcode is not supported");
         }

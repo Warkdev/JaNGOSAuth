@@ -20,6 +20,7 @@ import eu.jangos.auth.network.packet.AbstractAuthClientPacket;
 import eu.jangos.auth.network.packet.client.CAuthLogonChallengePacket;
 import eu.jangos.auth.network.packet.client.CAuthLogonProofPacket;
 import eu.jangos.auth.network.packet.client.CAuthRealmList;
+import eu.jangos.auth.network.packet.client.CAuthReconnectProofPacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -69,6 +70,12 @@ public class AuthPacketDecoder extends ByteToMessageDecoder {
                 break;
             case CMD_REALM_LIST:
                 packet = new CAuthRealmList(code);                
+                break;
+            case CMD_AUTH_RECONNECT_CHALLENGE:                
+                packet = new CAuthLogonChallengePacket(code);
+                break;
+            case CMD_AUTH_RECONNECT_PROOF:
+                packet = new CAuthReconnectProofPacket(code);
                 break;
             default:
                 logger.error("Context: " + ctx.name() + "Packet received, opcode not supported: " + code);
