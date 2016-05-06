@@ -9,16 +9,17 @@
     <property name="hibernate.connection.password"/>
     <property name="hibernate.show_sql">true</property>
     <property name="hibernate.query.factory_class">org.hibernate.hql.internal.classic.ClassicQueryTranslatorFactory</property>
-    <mapping resource="eu/jangos/auth/model/Account.hbm.xml"/>
-    <mapping resource="eu/jangos/auth/model/Realmtype.hbm.xml"/>
-    <mapping resource="eu/jangos/auth/model/Realmtimezone.hbm.xml"/>
-    <mapping resource="eu/jangos/auth/model/Parameter1.hbm.xml"/>
-    <mapping resource="eu/jangos/auth/model/Commands.hbm.xml"/>
-    <mapping resource="eu/jangos/auth/model/Realm.hbm.xml"/>
-    <mapping resource="eu/jangos/auth/model/Bannedaccount.hbm.xml"/>
-    <mapping resource="eu/jangos/auth/model/Bannedip.hbm.xml"/>
-    <mapping resource="eu/jangos/auth/model/Locale.hbm.xml"/>
-    <mapping resource="eu/jangos/auth/model/Roles.hbm.xml"/>
-    <mapping resource="eu/jangos/auth/model/RealmAccount.hbm.xml"/>
+    <mapping class="eu.jangos.auth.model.Account"/>
+    <mapping class="eu.jangos.auth.model.Bannedip"/>
+    <mapping class="eu.jangos.auth.model.RealmAccount"/>
+    <mapping class="eu.jangos.auth.model.Parameter1"/>
+    <mapping class="eu.jangos.auth.model.Realmtype"/>
+    <mapping class="eu.jangos.auth.model.Bannedaccount"/>
+    <mapping class="eu.jangos.auth.model.Realmtimezone"/>
+    <mapping class="eu.jangos.auth.model.Locale"/>
+    <mapping class="eu.jangos.auth.model.Roles"/>
+    <mapping class="eu.jangos.auth.model.Commands"/>
+    <mapping class="eu.jangos.auth.model.RealmAccountId"/>
+    <mapping class="eu.jangos.auth.model.Realm"/>
   </session-factory>
 </hibernate-configuration>

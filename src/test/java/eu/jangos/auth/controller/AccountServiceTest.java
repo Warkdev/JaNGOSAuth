@@ -147,8 +147,8 @@ public class AccountServiceTest {
     @Test
     public void testLoginAccountNotExisting() {
         System.out.println("testLoginAccountNotExisting");
-        String name = "dont exist";
-        Account account = new Account(name, "AAAAAAA", new Date(), "0.0.0.0", 0, false, false, new Date());
+        String name = "dont exist";        
+        Account account = new Account(name, "AAAAAAA", new Date(), "0.0.0.0", 0, false, new Date(), false);
         String ip = "127.0.0.1";
         String locale = "frFR";
         String session = "640067444B1823BA653F6141D2F7508D213F3A213D9ED6C0A469AAD3FBB584C45458D83CF796A369";
@@ -283,7 +283,7 @@ public class AccountServiceTest {
     public void testInvalidAccountBanned() {
         System.out.println("testInvalidAccountBanned");
         String name = "dont exist";
-        Account account = new Account(name, "AAAAAAA", new Date(), "0.0.0.0", 0, false, false, new Date());
+        Account account = new Account(name, "AAAAAAA", new Date(), "0.0.0.0", 0, false, new Date(), false);
         String ip = "127.0.0.1";
         AccountService instance = new AccountService();
         assertTrue(instance.isBanned(account, ip));
